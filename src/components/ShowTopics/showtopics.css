@@ -1,48 +1,54 @@
-.showtopic{
-  padding: 10px;
+
+.showtopics{
   display: flex;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0e7e7;
   align-items: center;
-  border-bottom: 1px solid #ccc;
 }
-.showtopic>a>img{
+.showtopics:hover{
+  background-color: #f6f6f6;
+}
+.showtopics img{
   width: 30px;
   height: 30px;
-  border-radius: 5px;
-  margin-right: 10px;
-  flex-shrink: 0;
+  margin-left: 16px;
 }
-.showtopic>.topic-info{
-  width: 85px;
+.showtopics .show-num{
+  width: 83px;
+  color:#ccc;
   text-align: center;
-  margin-right: 5px;
-  flex-shrink:  0;
 }
-.showtopic .topic-tab{
-  padding: 3px;
-  border-radius: 2px;
+.showtopics span.top-good{
   font-size: 12px;
+  width: 32px;
+  text-align: center;
   background-color: #e5e5e5;
   color: #999;
-  margin-right: 10px;
-  flex-shrink:  0;
+  border-radius: 5px;
 }
-
-.showtopic .topic-tab.active{
+.showtopics span.active{
   background-color: #80bd01;
   color: white;
 }
-.showtopic .topic-title{
+.topic-title{
+  width: 500px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  margin: 0 10px;
 }
-.showtopic .topic-title a{
-  text-decoration: none;
+.topic-title a{
   color: #333;
+  text-decoration: none;
 }
-.showtopic .topic-title a:visited{
-  color: #888;
-}
-.showtopic .topic-title a:hover{
+.topic-title a:hover{
   text-decoration: underline;
 }
+.topic-title a:visited{
+  color: #888;
+}
+/* body{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+} */

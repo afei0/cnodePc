@@ -1,58 +1,86 @@
-import React from 'react'
-import './home.css'
-import ShowTopics from '../ShowTopics/ShowTopics'
+import React, { Component } from 'react'
 import axios from 'axios'
-class Home extends React.Component {
-  state={
-    data:[],
-    tab:'all'
+import ShowTopics from '../ShowTopics/ShowTopics'
+import './home.css'
+
+class Home extends Component {
+  
+  state = {
+    data : [],
+    tab : 'all'
   }
-  getData = (tab) => {
-    axios.get(`https://cnodejs.org/api/v1/topics?tab=${tab !== 'all' ? tab : ''}`)
-    .then((res)=>{
-      this.setState({
-        data : res.data.data
-      })
-    })
-    .catch((err)=>{
-      alert(err)
-    })
+
+  getData = tab => {
+    axios.get(`https://cnodejs.org/api/v1/topics?tab=${tab === 'all'?'':tab}`)
+    .then(
+      res =>{
+        this.setState({
+          data : res.data.data
+        })
+      }
+    )
+    .catch(
+      err => {
+        console.log(err)
+      }
+    )
   }
-  componentDidMount() {
+
+  componentDidMount(){
     this.getData('all')
-  }
-  handleClick = (tab) => {
+   }
+
+   handleClick = tab => {
     this.getData(tab)
     this.setState({
-      tab:tab
+      tab : tab
     })
-  }
-  render () {
-    let tabs = [{
-      tab:'all',
-      text:'全部'
-    },{
-      tab:'good',
-      text:'精华'
-    },{
-      tab:'share',
-      text:'分享'
-    },{
-      tab:'ask',
-      text:'问答'
-    },{
-      tab:'job',
-      text:'招聘'
-    }]
+   }
+
+  render() {
+    const tabsArr = [
+      {
+        id:1,
+        tab:'all',
+        text:'全部'
+      },
+      {
+        id:2,
+        tab:'good',
+        text:'精华'
+      },
+      {
+        id:3,
+        tab:'share',
+        text:'分享'
+      },
+      {
+        id:4,
+        tab:'ask',
+        text:'问答'
+      },
+      {
+        id:5,
+        tab:'job',
+        text:'招聘'
+      }
+    ]
+    //将导航那条tab栏map出来 (映射)
     const { data, tab } = this.state
+    let tabs = tabsArr.map(
+      item=>{
+        return (
+          <span key = {item.id} onClick = {()=>{this.handleClick(item.tab)}} className = {`${tab===item.tab&&'active'}`}>{item.text}</span>
+        )
+      }
+    )
+    
     return (
-      <div className='content'>
-        <div className='tabs'>
-          { tabs.map((item,index)=>(
-            <span key={index} onClick={()=>{this.handleClick(item.tab)}}className={`${tab===item.tab&&'active'}`}>{item.text}</span>
-          ))}
+      <div className = 'wrap'>
+        <div className = 'tabs'>
+          { tabs }
         </div>
-        <ShowTopics data={data}/>
+          <ShowTopics data = { data }/>
       </div>
     )
   }

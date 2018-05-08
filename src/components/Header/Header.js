@@ -1,79 +1,89 @@
-import React from 'react'
-import './header.css'
-import { Link,withRouter } from 'react-router-dom'
+import React, { Component } from 'react'
 import axios from 'axios'
-class Header extends React.Component {
+import {Link, withRouter} from 'react-router-dom'
+import './header.css'
+
+class Header extends Component {
   state = {
-    login:false,
-    token:'',
-    userInfo:null
+    token : '',
+    login : false,
+    userInfo: null
   }
-  componentDidMount() {
-    if(sessionStorage.token === '9948d556-1825-416f-934f-b3ce046403e3' ) {
+
+  componentDidMount(){
+    if(sessionStorage.token === 'c2a3daea-acab-4b35-b719-8cf0ae44a877'){
       axios.post('https://cnodejs.org/api/v1/accesstoken',{accesstoken:sessionStorage.token})
-      .then(res=>{
-        this.setState({
-          login: true,
-          userInfo: res.data
-        })
-      })
-      .catch(err=>{
+      .then(
+        res => {
+          this.setState({
+            userInfo:res.data,
+            login:true
+          })
+        }
+      )
+      .catch( err => {
         alert(err)
       })
     }
   }
   handleChange = e => {
-    console.log(this.state.token)
     this.setState({
-      token: e.target.value
+      token : e.target.value
     })
   }
+
   handleLogin = () => {
-    const { token } = this.state
+    const {token} = this.state
+    sessionStorage.token = token
     axios.post('https://cnodejs.org/api/v1/accesstoken',{accesstoken:token})
-    .then(res=>{
-      sessionStorage.token = token
-      // localStorage.token = token
-      this.setState({
-        login: true,
-        userInfo: res.data
-      })
-    })
-    .catch(err=>{
+    .then(
+      res => {
+        this.setState({
+          userInfo:res.data,
+          login:true
+        })
+      }
+    )
+    .catch( err => {
       alert(err)
     })
   }
+
   handleLogout = () => {
     sessionStorage.clear('token')
     this.setState({
-      login: false,
-      userInfo: null,
-      token:''
+      userInfo:null,
+      token:'',
+      login:false
     })
     this.props.history.push('/')
   }
-  render () {
+  render() {
     const { token, login, userInfo } = this.state
+    // console.log(userInfo)
     return (
-      <header>
-        <Link to='/'>
-          <img style={{width:'140px'}} src='https://o4j806krb.qnssl.com/public/images/cnodejs_light.svg' alt="111" />
-        </Link>
+      <div className = 'head-content'>
+        <Link to = '/'><img src="//o4j806krb.qnssl.com/public/images/cnodejs_light.svg" alt="11"/></Link>
         {
-          login ? (<div className='logout'>
-            <Link to='/topic/create'>发布文章</Link>
-            <Link to='/user/${userInfo.loginname}'>
-            <img className='author-pic' src={userInfo.avatar_url} alt="111"/>
-            </Link>
-            <button onClick={this.handleLogout}>退出</button>
-          </div>) : (<div className='login'>
-            <input  type="text" value={token} onChange={this.handleChange}/>
-            <button onClick={this.handleLogin}>登录</button>
-          </div>)
+          login ? 
+          (
+            <div>
+              <Link to = '/topic/create'><button>发布话题</button></Link>
+              <Link to = {`/user/${userInfo.loginname}`}><img src={userInfo.avatar_url} alt="111"/></Link>
+              <button onClick = {this.handleLogout}>退出</button>
+            </div>
+          ) 
+          :
+          (
+            <div>
+              <input type="text" value = {token} onChange = { this.handleChange }/>
+              <button onClick = {this.handleLogin}>登录</button>
+            </div>
+          )
         }
-      </header>
+      </div>
     )
   }
 }
 
-export default (Header)
+export default withRouter(Header)
